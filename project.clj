@@ -5,6 +5,7 @@
                  [com.google.appengine/appengine-tools-sdk "1.5.0"]
                  [ring/ring-servlet "0.3.8"]
                  [ring "0.3.8"]
+                 [clj-soy "0.1.0"]
                  [compojure "0.6.3"]]
   :dev-dependencies [[swank-clojure "1.3.1"]
                      [appengine-magic "0.4.2-SNAPSHOT"]])
