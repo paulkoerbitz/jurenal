@@ -1,0 +1,50 @@
+{namespace jurenal}
+
+/**
+ * Displays a post
+ * @param post: a post with a title and a body
+ */
+{template .post}
+  <h1><a href="/{$post.slug}">{$post.title}</a></h1>
+  <p>{$post.body}</p>
+  <p><a href="/{$post.slug}">show</a> | 
+     <a href="/edit/{$post.slug}">edit</a> | 
+     <a href="/delete/{$post.slug}">delete</a></p>
+{/template}
+
+/**
+ * Displays a list of posts
+ * @param postlist list of posts to show
+ */
+{template .postlist}
+  {foreach $post in $postlist}
+    {call .post}
+      {param post: $post /}
+    {/call}
+    {if not isLast($post)}
+      <br />
+    {/if}
+  {ifempty}
+    No posts to show.
+  {/foreach}
+{/template}
+
+/**
+ * Displays a form to create or change a post
+ * @param post A post 
+ */
+{template .editpost}
+<html><body>
+<h1>Here you can edit a post</h1>
+<form action="/update" method="post" enctype="multipart/form-data">
+<input type="text" name="title" size="60" value="{$post.title}">
+<br />
+<textarea rows="20" cols="60" name="body">
+{$post.body}
+</textarea>
+<br />
+<input type="hidden" name="slug" value="{$post.slug}" />
+<input type="submit" value="Change post" />
+</form>
+</body></html>
+{/template}

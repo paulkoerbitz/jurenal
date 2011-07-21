@@ -1,5 +1,5 @@
 (ns jurenal.core
-  (:use 
+  (:use
     compojure.core
     jurenal.views
     [appengine-magic.multipart-params :only [wrap-multipart-params]])
