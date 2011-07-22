@@ -27,11 +27,11 @@
 
 (defn show-post [slug] 
   (soy/render tpl/*posts* "jurenal.post" 
-                {:post (map->soy (first (models/fetch slug)))}))
+                {:post (map->soy (models/fetch slug))}))
 
 (defn edit-post [slug]
   (soy/render tpl/*posts* "jurenal.editpost"
-    {:post (map->soy (first (models/fetch slug)) )}))
+    {:post (map->soy (models/fetch slug))}))
 
 (defn update-post [{{slug "slug" title "title" body "body"} :params}]
   (println slug title body)
