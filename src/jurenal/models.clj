@@ -26,7 +26,6 @@
 
 (defn fetch [slug]
   (let [post (first (ds/query :kind Post :filter (= :slug slug)))]
-    (println post)
     post))
 
 (defn fetch-all []

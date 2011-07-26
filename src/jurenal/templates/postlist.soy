@@ -3,35 +3,42 @@
 /**
  * Displays a post
  * @param post: a post with a title and a body
+ * @param editable: Boolean, show 'edit' and 'delete' links if true
  */
 {template .post}
   <h1><a href="/{$post.slug}">{$post.title}</a></h1>
   <p>{$post.body}</p>
-  <p><a href="/{$post.slug}">show</a> | 
-     <a href="/edit/{$post.slug}">edit</a> | 
+  {if $editable}  
+  <p><a href="/edit/{$post.slug}">edit</a> | 
      <a href="/delete/{$post.slug}">delete</a></p>
+  {/if}
 {/template}
 
 /**
  * Displays the abbreviated version of a post
  * @param post: a post with a title and a body
+ * @param editable: Boolean, show 'edit' and 'delete' links if true
  */
 {template .shortpost}
   <h1><a href="/{$post.slug}">{$post.title}</a></h1>
   <p>{$post.short}</p>
-  <p><a href="/{$post.slug}">show</a> | 
-     <a href="/edit/{$post.slug}">edit</a> | 
-     <a href="/delete/{$post.slug}">delete</a></p>
+  <p><a href="/{$post.slug}">show</a> 
+  {if $editable}
+     | <a href="/edit/{$post.slug}">edit</a> 
+     | <a href="/delete/{$post.slug}">delete</a></p>
+  {/if}
 {/template}
 
 /**
  * Displays a list of posts
  * @param postlist list of posts to show
+ * @param editable: Boolean, show 'edit' and 'delete' links if true 
  */
 {template .postlist}
   {foreach $post in $postlist}
     {call .shortpost}
       {param post: $post /}
+      {param editable: $editable /}
     {/call}
     {if not isLast($post)}
       <br />
@@ -47,6 +54,7 @@
  */
 {template .editpost}
 <html><body>
+<a href="/logout">log out</a>
 <h1>Here you can edit a post</h1>
 <form action="/update" method="post" enctype="multipart/form-data">
 <input type="text" name="title" size="60" value="{$post.title}">

@@ -2,8 +2,10 @@
   (:require 
     [jurenal.models :as models]
     [jurenal.templates :as tpl]
+    [jurenal.utils :as utils]
     [ring.util.response :as response]
-    [clj-soy.template :as soy])
+    [clj-soy.template :as soy]
+    [appengine-magic.services.user :as usr])
   (:import play.templates.JavaExtensions))
 
 (defn date->str [x] (if (= (type x) java.util.Date) (str x) x))
@@ -22,28 +24,35 @@
 
 (defn index []
   (soy/render tpl/*posts* "jurenal.postlist"
-    {:postlist (map map->soy (models/fetch-all))})) 
+              {:postlist (map map->soy (models/fetch-all))
+               :editable (utils/authorized?)})) 
 
-(defn create-post [] 
-  (soy/render tpl/*posts* "jurenal.editpost"
-    {:post {"title" "" "body" "" "slug" ""}}))
+(defn create-post []
+   (utils/check-auth
+    (soy/render tpl/*posts* "jurenal.editpost"
+                {:post {"title" "" "body" "" "slug" ""}})))
 
 (defn show-post [slug] 
   (soy/render tpl/*posts* "jurenal.post" 
-                {:post (map->soy (models/fetch slug))}))
+              {:post (map->soy (models/fetch slug))
+               :editable (utils/authorized?)}))
+
 
 (defn edit-post [slug]
-  (soy/render tpl/*posts* "jurenal.editpost"
-    {:post (map->soy (models/fetch slug))}))
-
-(defn update-post [{{slug "slug" title "title" body "body"} :params}]
-  (do
-    (if (not (= slug ""))
-      (models/update {:slug slug :title title :body body})
-      (let [slug (JavaExtensions/slugify title)]
-        (models/create {:slug slug :title title :body body :published true})))
-    (response/redirect (str "/" slug))))
+   (utils/check-auth
+    (soy/render tpl/*posts* "jurenal.editpost"
+    {:post (map->soy (models/fetch slug))})))
   
+(defn update-post [{{slug "slug" title "title" body "body"} :params}]
+  (utils/check-auth
+   (do
+     (if (not (= slug ""))
+       (models/update {:slug slug :title title :body body})
+       (let [slug (JavaExtensions/slugify title)]
+         (models/create {:slug slug :title title :body body :published true})))
+     (response/redirect (str "/" slug)))))
+
 (defn delete-post [slug]
-  (models/delete slug)
-  (response/redirect "/"))
+   (utils/check-auth
+    (models/delete slug)
+    (response/redirect "/")))

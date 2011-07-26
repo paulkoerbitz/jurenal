@@ -5,10 +5,13 @@
     [appengine-magic.multipart-params :only [wrap-multipart-params]])
   (:require 
     [appengine-magic.core :as ae]
-    [appengine-magic.services.datastore :as ds])
+    [appengine-magic.services.datastore :as ds]
+    [appengine-magic.services.user :as usr]
+    [ring.util.response :as response])
   (:import play.templates.JavaExtensions))
 
 (defroutes jurenal-app-handler
+  (GET "/logout" [] (response/redirect (usr/logout-url)))
   (GET "/" [] (index))
   (GET "/create" [] (create-post)) 
   (POST "/update" _ (wrap-multipart-params update-post))

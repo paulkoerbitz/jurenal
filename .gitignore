@@ -7,3 +7,4 @@ pom.xml
 *.swo
 *.bin
 /vim/
+bin/*
