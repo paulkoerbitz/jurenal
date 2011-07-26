@@ -9,7 +9,7 @@
   <h1><a href="/{$post.slug}">{$post.title}</a></h1>
   <p>{$post.body}</p>
   {if $editable}  
-  <p><a href="/edit/{$post.slug}">edit</a> | 
+  <p><a href="/edit/{$post.slug}">edit</a>&nbsp;|&nbsp; 
      <a href="/delete/{$post.slug}">delete</a></p>
   {/if}
 {/template}
@@ -22,10 +22,12 @@
 {template .shortpost}
   <h1><a href="/{$post.slug}">{$post.title}</a></h1>
   <p>{$post.short}</p>
-  <p><a href="/{$post.slug}">show</a> 
+  <p><a href="/{$post.slug}">show</a>
   {if $editable}
-     | <a href="/edit/{$post.slug}">edit</a> 
-     | <a href="/delete/{$post.slug}">delete</a></p>
+      &nbsp;|&nbsp;<a href="/edit/{$post.slug}">edit</a>
+      &nbsp;|&nbsp; <a href="/delete/{$post.slug}">delete</a></p>
+  {else}
+     </p>
   {/if}
 {/template}
 

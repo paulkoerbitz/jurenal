@@ -1,7 +1,7 @@
 (ns jurenal.models 
-  (:require [appengine-magic.services.datastore :as ds])
-  (:import (play.templates JavaExtensions)
-           (java.util Date)
+  (:require [appengine-magic.services.datastore :as ds]
+            [jurenal.utils :as utils])
+  (:import (java.util Date)
            (com.google.appengine.api.datastore Text)))
 
 (ds/defentity Post [^:key slug, title, ^Text body, short,
@@ -19,8 +19,9 @@
       (str elided " ..."))))
 
 (defn create [{title :title body :body short :short published :published}]
+  (println "Call to create, title =" title)
   (let [created-on (Date.)
-        slug (JavaExtensions/slugify title)
+        slug (utils/slugify title)
         short (if short short (elide-after 50 body))]
     (ds/save! (Post. slug title (Text. body) short published created-on created-on))))
 
@@ -32,6 +33,7 @@
   (ds/query :kind Post :sort [[:last-changed :dsc]]))
 
 (defn update [{slug :slug title :title body :body}]
+  (println "Call to update, slug =" slug)
   (let [post (fetch slug)
         now (Date.)]
     (ds/save! (assoc post :title title :body (Text. body) :last-changed now))))
