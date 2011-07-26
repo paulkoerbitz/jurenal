@@ -13,12 +13,24 @@
 {/template}
 
 /**
+ * Displays the abbreviated version of a post
+ * @param post: a post with a title and a body
+ */
+{template .shortpost}
+  <h1><a href="/{$post.slug}">{$post.title}</a></h1>
+  <p>{$post.short}</p>
+  <p><a href="/{$post.slug}">show</a> | 
+     <a href="/edit/{$post.slug}">edit</a> | 
+     <a href="/delete/{$post.slug}">delete</a></p>
+{/template}
+
+/**
  * Displays a list of posts
  * @param postlist list of posts to show
  */
 {template .postlist}
   {foreach $post in $postlist}
-    {call .post}
+    {call .shortpost}
       {param post: $post /}
     {/call}
     {if not isLast($post)}
