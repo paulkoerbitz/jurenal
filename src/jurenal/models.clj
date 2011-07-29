@@ -19,7 +19,6 @@
       (str elided " ..."))))
 
 (defn create [{title :title body :body short :short published :published}]
-  (println "Call to create, title =" title)
   (let [created-on (Date.)
         slug (utils/slugify title)
         short (if short short (elide-after 50 body))]
@@ -33,7 +32,6 @@
   (ds/query :kind Post :sort [[:last-changed :dsc]]))
 
 (defn update [{slug :slug title :title body :body}]
-  (println "Call to update, slug =" slug)
   (let [post (fetch slug)
         now (Date.)]
     (ds/save! (assoc post :title title :body (Text. body) :last-changed now))))
