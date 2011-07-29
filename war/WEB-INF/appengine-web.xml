@@ -2,8 +2,6 @@
   <application>paulkoer</application>
   <version>4</version>
   <static-files/>
-  <resource-files>
-    <include path="/**/*.soy" />
-  </resource-files>
+  <resource-files />
   <threadsafe>true</threadsafe>
 </appengine-web-app>

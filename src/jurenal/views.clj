@@ -1,7 +1,7 @@
 (ns jurenal.views
   (:require 
     [jurenal.models :as models]
-    [jurenal.templates :as tpl]
+    [jurenal.templates :as tmpl]
     [jurenal.utils :as utils]
     [ring.util.response :as response]
     [clj-soy.template :as soy]
@@ -27,27 +27,22 @@
    :body "<h1>Four-oh-four</h1>"})
 
 (defn index []
-  (soy/render tpl/*posts* "jurenal.postlist"
-              {:postlist (map map->soy (models/fetch-all))
-               :editable (utils/authorized?)}))
+  (tmpl/postlist (map map->soy (models/fetch-all))
+                (utils/authorized?)))
 
 (defn create-post []
-   (utils/check-auth
-    (soy/render tpl/*posts* "jurenal.editpost"
-                {:post {"title" "" "body" "" "slug" ""}})))
+  (utils/check-auth
+   (tmpl/editpost {"title" "" "body" "" "slug" ""})))
 
 (defn show-post [slug]
   (let [post (models/fetch slug)]
     (if (nil? post)
       (respond-404)
-      (soy/render tpl/*posts* "jurenal.post" 
-              {:post (map->soy (models/fetch slug))
-               :editable (utils/authorized?)}))))
+      (tmpl/post (map->soy (models/fetch slug)) (utils/authorized?)))))
 
 (defn edit-post [slug]
-   (utils/check-auth
-    (soy/render tpl/*posts* "jurenal.editpost"
-    {:post (map->soy (models/fetch slug))})))
+  (utils/check-auth
+   (tmpl/editpost (map->soy (models/fetch slug)))))
   
 (defn update-post [{{slug "slug" title "title" body "body"} :params}]
   (utils/check-auth
