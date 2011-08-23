@@ -1,17 +1,132 @@
 {namespace jurenal.templates}
 
+/** 
+ * .head -- wraps the header
+ */
+{template .head}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/media/css/style.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="/media/css/print.css" rel="stylesheet" type="text/css" media="print"/>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu:300,700,300italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="/media/js/shCore.js"></script>
+<script type="text/javascript" src="/media/js/shBrushClojure.js"></script>
+<link type="text/css" rel="stylesheet" href="/media/css/shCoreDefault.css"/>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+<script type="text/javascript" src="media/cljs/out/goog/base.js"></script> 
+<script type="text/javascript" src="media/cljs/jurenal.js"></script> 
+<script> 
+  goog.require('hello.core');
+</script> 
+<script> 
+  //alert(greet("Paul"));
+  //alert("The sum of [1,2,3,4,5,6,7,8,9] is: " + hello.core.sum([2,2,3,4,5,6,7,8,9]));
+</script> 
+<script>alert(hello.core.gettweets());</script>
+<script>alert(hello.core.makestrobj());</script>
+<title>Pauls Blog</title>
+<meta name="google-site-verification" content="6WNCrscERpHIswfX-uAUPFYd9MhWliuNlQ8izP0UmUQ" />
+</head>
+<body>
+  <div class="container">
+{/template}
+
+/**
+ * .nav -- navigation
+ */
+{template .nav}
+    <div class="header" id="header">
+      <div class="nav_container" id="main_nav_container">
+        <div>
+          <ul id="navigation">
+            <li id="nav_home"> <a href='/'>(home)</a></li>
+            <li id="nav_twitter"><a href='http://twitter.com/#!/paulkoer'>(twitter)</a></li>
+            <li id="nav_about"><a href="/about">(about)</a></li>               
+          </ul>
+        </div>
+      </div>
+    </div>
+{/template}
+
+/**
+ * .sidebar
+ * displays the sidebar on the left
+ */
+{template .sidebar}
+    <div class="sidebar">
+      <div id="about" class="sidebar_item">
+         <h3><a href="/about">(about)</a></h3>
+         <img src="/media/img/Paul_Koerbitz.jpg" height="67" width="50" style="float:left; margin:10px;" /><p> Hi there. I'm Paul, Phd student, clojure enthusiast, wannabe entrepreneur. This blog is a little experiment to write a blog in <a href="http://www.clojure.org">clojure</a> that runs on <a href="appengine.google.com">Google App Engine</a>. I also dump my thoughts and experiments here. Feel free to look around, <a href="mailto:paul[dot]koerbitz[at]gmail[dot]com">contact me</a> or <a href="http://www.twitter.com/#!/paulkoer">follow me</a> on twitter.</p>
+       </div> <!-- about -->
+       <div id ="updates" class="sidebar_item"> 
+         <h3><a href="http://twitter.com/#!/paulkoer">(twitter)</a></h3>
+       </div>
+    </div>
+{/template}
+
+/**
+ * .content
+ * main content
+ * @param content
+ */
+{template .content}
+    <div class="content">
+    {$content|noAutoescape}
+    </div>
+{/template}
+
+/**
+ * .footer
+ */
+{template .footer}
+    <div class="footer">
+    </div>
+{/template}
+
+/**
+ * .foot
+ */
+{template .foot}
+  </div>
+</body>
+</html>
+{/template}
+
+/**
+ * .base
+ * @param content
+ */
+{template .base}
+{call .head}{/call}
+{call .nav /}
+{call .content}
+      {param content: $content /}
+{/call}
+{call .sidebar /}
+{call .footer /}
+{call .foot /}
+{/template}
+
 /**
  * Displays a post
  * @param post: a post with a title and a body
  * @param editable: Boolean, show 'edit' and 'delete' links if true
  */
-{template .post}
-  <h1><a href="/{$post.slug}">{$post.title}</a></h1>
-  <p>{$post.body}</p>
-  {if $editable}  
-  <p><a href="/edit/{$post.slug}">edit</a>&nbsp;|&nbsp; 
-     <a href="/delete/{$post.slug}">delete</a></p>
-  {/if}
+{template .detailpost}
+<div class="post">
+<div class="post_header">
+<h2>{$post.title}</h2>
+</div>
+<p>Posted on {$post.created_on}</p>
+<p>{$post.body|noAutoescape}</p>
+<!--<p>Tags:</p>-->
+{if $editable}  
+<p><a href="/edit/{$post.slug}">edit</a>&nbsp;|&nbsp; 
+   <a href="/delete/{$post.slug}">delete</a></p>
+{/if}
+</div>
 {/template}
 
 /**
@@ -20,15 +135,25 @@
  * @param editable: Boolean, show 'edit' and 'delete' links if true
  */
 {template .shortpost}
-  <h1><a href="/{$post.slug}">{$post.title}</a></h1>
-  <p>{$post.short}</p>
-  <p><a href="/{$post.slug}">show</a>
-  {if $editable}
-      &nbsp;|&nbsp;<a href="/edit/{$post.slug}">edit</a>
-      &nbsp;|&nbsp; <a href="/delete/{$post.slug}">delete</a></p>
-  {else}
-     </p>
-  {/if}
+<div class="post">
+<div class="post_header">
+<h2><a href="{$post.slug}">{$post.title}</a></h2>
+</div>
+<p>{$post.created_on}</p>
+<p>{$post.short|noAutoescape}</p>
+<div style="clear: both;"> </div>
+<p> 
+<span class="continue_link" style="float:right;">
+<a href="{$post.slug}">show</a> 
+{if $editable}
+  &nbsp;|&nbsp;<a href="/edit/{$post.slug}">edit</a>
+  &nbsp;|&nbsp;<a href="/delete/{$post.slug}">delete</a>
+{/if}
+</span>
+<div style="clear: both;"> </div>
+</p>
+</div>
+<hr/>
 {/template}
 
 /**
@@ -42,9 +167,6 @@
       {param post: $post /}
       {param editable: $editable /}
     {/call}
-    {if not isLast($post)}
-      <br />
-    {/if}
   {ifempty}
     No posts to show.
   {/foreach}
@@ -55,9 +177,6 @@
  * @param post A post 
  */
 {template .editpost}
-<html><body>
-<a href="/logout">log out</a>
-<h1>Here you can edit a post</h1>
 <form action="/update" method="post" enctype="multipart/form-data">
 <input type="text" name="title" size="60" value="{$post.title}">
 <br />
@@ -68,5 +187,51 @@
 <input type="hidden" name="slug" value="{$post.slug}" />
 <input type="submit" value="Change post" />
 </form>
-</body></html>
+{/template}
+
+
+/**
+ * List view
+ * @param postlist list of posts to show
+ * @param editable: Boolean, show 'edit' and 'delete' links if true 
+ */
+{template .listview}
+  {call .base}
+    {param content}
+      {call .postlist}
+        {param postlist: $postlist /}
+        {param editable: $editable /}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Detailed view
+ * @param post list of posts to show
+ * @param editable: Boolean, show 'edit' and 'delete' links if true 
+ */
+{template .detailedview}
+  {call .base}
+    {param content}
+      {call .detailpost}
+        {param post: $post/}
+        {param editable: $editable/}
+      {/call}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Edit view
+ * @param post   post to edit
+ */
+{template .editview}
+  {call .base}
+    {param content}
+      {call .editpost}
+        {param post: $post /}
+      {/call}
+    {/param}
+  {/call}
 {/template}

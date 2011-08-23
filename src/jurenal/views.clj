@@ -4,8 +4,7 @@
     [jurenal.templates :as tmpl]
     [jurenal.utils :as utils]
     [ring.util.response :as response]
-    [clj-soy.template :as soy]
-    [appengine-magic.services.user :as usr]))
+     [appengine-magic.services.user :as usr]))
 
 (defn date->str [x] (if (= (type x) java.util.Date) (str x) x))
 (defn long->int [x] (if (= (type x) java.lang.Long) (.intValue x) x))
@@ -27,22 +26,22 @@
    :body "<h1>Four-oh-four</h1>"})
 
 (defn index []
-  (tmpl/postlist (map map->soy (models/fetch-all))
+  (tmpl/listview (map map->soy (models/fetch-all))
                 (utils/authorized?)))
 
 (defn create-post []
   (utils/check-auth
-   (tmpl/editpost {"title" "" "body" "" "slug" ""})))
+   (tmpl/editview {"title" "" "body" "" "slug" ""})))
 
 (defn show-post [slug]
   (let [post (models/fetch slug)]
     (if (nil? post)
       (respond-404)
-      (tmpl/post (map->soy (models/fetch slug)) (utils/authorized?)))))
+      (tmpl/detailedview (map->soy (models/fetch slug)) (utils/authorized?)))))
 
 (defn edit-post [slug]
   (utils/check-auth
-   (tmpl/editpost (map->soy (models/fetch slug)))))
+   (tmpl/editview (map->soy (models/fetch slug)))))
   
 (defn update-post [{{slug "slug" title "title" body "body"} :params}]
   (utils/check-auth
