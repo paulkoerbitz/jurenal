@@ -2,8 +2,8 @@
   (:use
     compojure.core
     jurenal.views
-    cljs-devmode.ring-middleware
-    ring.adapter.jetty
+    ;; cljs-devmode.ring-middleware
+    ;; ring.adapter.jetty
     [appengine-magic.multipart-params :only [wrap-multipart-params]])
   (:require 
     [appengine-magic.core :as ae]
