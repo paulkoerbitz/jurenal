@@ -16,17 +16,12 @@
 <script type="text/javascript" src="/media/js/shBrushClojure.js"></script>
 <link type="text/css" rel="stylesheet" href="/media/css/shCoreDefault.css"/>
 <script type="text/javascript">SyntaxHighlighter.all();</script>
-<!--<script type="text/javascript" src="media/cljs/out/goog/base.js"></script> -->
-<!--<script type="text/javascript" src="media/cljs/jurenal.js"></script> -->
-<!--<script> 
-  goog.require('hello.core');
-</script> 
-<script> 
-  //alert(greet("Paul"));
-  //alert("The sum of [1,2,3,4,5,6,7,8,9] is: " + hello.core.sum([2,2,3,4,5,6,7,8,9]));
-</script> 
-<script>alert(hello.core.gettweets());</script>
-<script>alert(hello.core.makestrobj());</script>-->
+<script type="text/javascript" src="/media/js/out/goog/base.js"></script> 
+<script type="text/javascript" src="/media/js/out/goog/deps.js"></script>
+<script type="text/javascript" src="/media/js/out/cljs/core.js"></script>
+<script type="text/javascript" src="/media/js/out/tweets/core.js"></script>
+<script type="text/javascript" src="/media/js/tweets.js"></script>
+<script>goog.require('tweets.core');</script>
 <title>Pauls Blog</title>
 <meta name="google-site-verification" content="6WNCrscERpHIswfX-uAUPFYd9MhWliuNlQ8izP0UmUQ" />
 </head>
@@ -63,6 +58,11 @@
          <h3><a href="/about">About</a></h3>
          <img src="/media/img/Paul_Koerbitz.jpg" height="67" width="50" style="float:left; margin:10px;" /><p> Hi there. I'm Paul, Phd student and Clojure enthusiast. This blog is a little experiment to write a blog in <a href="http://www.clojure.org">Clojure</a> that runs on <a href="appengine.google.com">Google App Engine</a>. I also dump my thoughts and experiments here. Feel free to look around, <a href="mailto:paul[dot]koerbitz[at]gmail[dot]com">contact me</a> or <a href="http://www.twitter.com/#!/paulkoer">follow me</a> on twitter.</p>
        </div> <!-- about -->
+      <br/>
+       <div id="tweets">
+         <h3><a href="www.twitter.com/paulkoer"/>Tweets</a></h3>
+         <script>insert_tweets();</script>
+       </div>
     </div>
 {/template}
 

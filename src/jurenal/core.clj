@@ -26,3 +26,4 @@
 ;; (def jurenal-app
 ;;   (into jurenal {:handler (wrap-cljs-forward (:handler jurenal) "/media/cljs")}))
 ;; (ae/serve jurenal-app)
+(ae/serve jurenal-app)
